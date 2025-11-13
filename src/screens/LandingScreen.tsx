@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  Image,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../types';
@@ -73,6 +74,11 @@ const LandingScreen: React.FC<Props> = ({navigation}) => {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container}>
         <View style={styles.header}>
+          <Image 
+            source={require('../assets/ecmapplogo.png')} 
+            style={styles.logo}
+            resizeMode="contain"
+          />
           <Text style={styles.title}>ECM Political Campaign</Text>
           <Text style={styles.subtitle}>Select an option to continue</Text>
         </View>
@@ -107,6 +113,11 @@ const styles = StyleSheet.create({
   header: {
     padding: SPACING.xl,
     alignItems: 'center',
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    marginBottom: SPACING.md,
   },
   title: {
     fontSize: FONT_SIZES.xxxl,

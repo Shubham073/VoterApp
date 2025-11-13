@@ -18,7 +18,7 @@ import Button from '../components/Button';
 import PaginationControls from '../components/PaginationControls';
 import LoadingSpinner from '../components/LoadingSpinner';
 import EmptyState from '../components/EmptyState';
-import BackButton from '../components/BackButton';
+import NavigationHeader from '../components/NavigationHeader';
 import {COLORS, SPACING, FONT_SIZES, BORDER_RADIUS, SHADOWS} from '../constants/theme';
 
 type AdvanceSearchScreenNavigationProp = NativeStackNavigationProp<
@@ -96,7 +96,7 @@ const AdvanceSearchScreen: React.FC<Props> = ({navigation}) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <BackButton />
+        <NavigationHeader />
         
         <ScrollView 
           style={styles.scrollView}

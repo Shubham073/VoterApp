@@ -16,7 +16,7 @@ import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList, Voter} from '../types';
 import {voterService} from '../services/api';
 import Button from '../components/Button';
-import BackButton from '../components/BackButton';
+import NavigationHeader from '../components/NavigationHeader';
 import {COLORS, SPACING, FONT_SIZES, BORDER_RADIUS, SHADOWS} from '../constants/theme';
 
 type VoterDetailsScreenNavigationProp = NativeStackNavigationProp<
@@ -71,6 +71,33 @@ const VoterDetailsScreen: React.FC<Props> = ({navigation, route}) => {
     navigation.navigate('WhatsAppMessage', {voter});
   };
 
+  const handleSendSlip = () => {
+    if (!voter.mobileNumber) {
+      Alert.alert('Error', 'No mobile number available');
+      return;
+    }
+    // Format voter details in a well-structured message
+    const message =
+      `🗳️ Voter Slip\n` +
+      `Name: ${voter.Name}\n` +
+      `EPIC No: ${voter['EPIC No']}\n` +
+      `Age: ${voter.Age}\n` +
+      `Gender: ${voter.Gender}\n` +
+      `House No: ${voter['House No']}\n` +
+      `Relation: ${voter['Relation Type']} ${voter['Relation Name']}\n` +
+      `Part No: ${voter['Part No']}\n` +
+      `Section: ${voter['Section Name']}\n` +
+      `Serial No: ${voter['Serial No']}\n` +
+      `Assembly: ${voter['Assembly Constituency No']} - ${voter['Assembly Constituency Name']}\n` +
+      `Reservation: ${voter['Reservation Status']}\n` +
+      `Polling Station: ${voter['Polling Station No']} - ${voter['Polling Station Name']}\n` +
+      `Address: ${voter['Polling Station Address']}\n`;
+    const url = `https://wa.me/91${voter.mobileNumber}?text=${encodeURIComponent(message)}`;
+    Linking.openURL(url).catch(() => {
+      Alert.alert('Error', 'Unable to open WhatsApp');
+    });
+  };
+
   const detailFields = [
     {label: 'Name', value: voter.Name},
     {label: 'EPIC No', value: voter['EPIC No']},
@@ -97,7 +124,7 @@ const VoterDetailsScreen: React.FC<Props> = ({navigation, route}) => {
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
-        <BackButton />
+        <NavigationHeader />
         
         <ScrollView 
           style={styles.scrollView}
@@ -241,6 +268,14 @@ const VoterDetailsScreen: React.FC<Props> = ({navigation, route}) => {
                 </>
               )}
             </View>
+            {/* Send Slip Button for all details pages */}
+            {voter.mobileNumber && (
+              <Button
+                title="Send Slip"
+                onPress={handleSendSlip}
+                style={styles.whatsappButton}
+              />
+            )}
 
             {/* Mobile Number Section - Outside the main card */}
             {isEditable && (
@@ -289,11 +324,18 @@ const VoterDetailsScreen: React.FC<Props> = ({navigation, route}) => {
                       variant="outline"
                     />
                     {voter.mobileNumber && (
-                      <Button
-                        title="Send WhatsApp Message"
-                        onPress={handleWhatsApp}
-                        style={styles.whatsappButton}
-                      />
+                      <>
+                        <Button
+                          title="Send WhatsApp Message"
+                          onPress={handleWhatsApp}
+                          style={styles.whatsappButton}
+                        />
+                        <Button
+                          title="Send Slip"
+                          onPress={handleSendSlip}
+                          style={styles.whatsappButton}
+                        />
+                      </>
                     )}
                   </>
                 )}

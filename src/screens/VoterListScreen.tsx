@@ -13,7 +13,7 @@ import VoterCard from '../components/VoterCard';
 import PaginationControls from '../components/PaginationControls';
 import LoadingSpinner from '../components/LoadingSpinner';
 import EmptyState from '../components/EmptyState';
-import BackButton from '../components/BackButton';
+import NavigationHeader from '../components/NavigationHeader';
 import {COLORS, SPACING} from '../constants/theme';
 
 type VoterListScreenNavigationProp = NativeStackNavigationProp<
@@ -68,7 +68,7 @@ const VoterListScreen: React.FC<Props> = ({navigation}) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <BackButton />
+        <NavigationHeader />
         
         {voters.length === 0 ? (
           <EmptyState message="No voters found" icon="👥" />

@@ -14,7 +14,7 @@ import SearchBar from '../components/SearchBar';
 import PaginationControls from '../components/PaginationControls';
 import LoadingSpinner from '../components/LoadingSpinner';
 import EmptyState from '../components/EmptyState';
-import BackButton from '../components/BackButton';
+import NavigationHeader from '../components/NavigationHeader';
 import {COLORS, SPACING} from '../constants/theme';
 
 type SearchScreenNavigationProp = NativeStackNavigationProp<
@@ -72,7 +72,7 @@ const SearchScreen: React.FC<Props> = ({navigation}) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <BackButton />
+        <NavigationHeader />
         
         <View style={styles.searchContainer}>
           <SearchBar

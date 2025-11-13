@@ -11,7 +11,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../types';
 import {voterService} from '../services/api';
 import Button from '../components/Button';
-import BackButton from '../components/BackButton';
+import NavigationHeader from '../components/NavigationHeader';
 import LoadingSpinner from '../components/LoadingSpinner';
 import {COLORS, SPACING, FONT_SIZES, BORDER_RADIUS, SHADOWS} from '../constants/theme';
 import RNFS from 'react-native-fs';
@@ -138,7 +138,7 @@ const DataScreen: React.FC<Props> = ({navigation}) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <BackButton />
+        <NavigationHeader />
         
         <View style={styles.content}>
           <View style={styles.header}>

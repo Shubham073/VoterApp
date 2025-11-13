@@ -15,7 +15,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../types';
 import Button from '../components/Button';
-import BackButton from '../components/BackButton';
+import NavigationHeader from '../components/NavigationHeader';
 import {COLORS, SPACING, FONT_SIZES, BORDER_RADIUS, SHADOWS} from '../constants/theme';
 type WhatsAppMessageScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -100,7 +100,7 @@ const WhatsAppMessageScreen: React.FC<Props> = ({navigation, route}) => {
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
-        <BackButton />
+        <NavigationHeader />
         
         <ScrollView 
           style={styles.scrollView}
