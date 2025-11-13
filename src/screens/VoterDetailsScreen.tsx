@@ -330,11 +330,6 @@ const VoterDetailsScreen: React.FC<Props> = ({navigation, route}) => {
                           onPress={handleWhatsApp}
                           style={styles.whatsappButton}
                         />
-                        <Button
-                          title="Send Slip"
-                          onPress={handleSendSlip}
-                          style={styles.whatsappButton}
-                        />
                       </>
                     )}
                   </>
@@ -517,6 +512,7 @@ const styles = StyleSheet.create({
   },
   whatsappButton: {
     marginTop: SPACING.md,
+    marginBottom: SPACING.md,
     backgroundColor: '#25D366',
   },
 });
