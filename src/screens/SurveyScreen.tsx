@@ -48,8 +48,8 @@ const SurveyScreen: React.FC<Props> = ({navigation}) => {
       const response = await voterService.getVoters(page);
       console.log('📝 fetchVoters response:', response);
       setVoters(response.voters);
-      setTotalPages(response.totalPages);
-      setCurrentPage(response.currentPage);
+      setTotalPages(Number(response.totalPages));
+      setCurrentPage(Number(response.currentPage));
       setIsSearchMode(false);
     } catch (error) {
       console.error('📝 fetchVoters error:', error);
@@ -70,8 +70,8 @@ const SurveyScreen: React.FC<Props> = ({navigation}) => {
       setLoading(true);
       const response = await voterService.searchVotersByName(searchQuery, page);
       setVoters(response.voters);
-      setTotalPages(response.totalPages);
-      setCurrentPage(response.currentPage);
+      setTotalPages(Number(response.totalPages));
+      setCurrentPage(Number(response.currentPage));
       setIsSearchMode(true);
     } catch (error) {
       Alert.alert('Error', 'Failed to search voters');

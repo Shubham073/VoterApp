@@ -45,8 +45,8 @@ const VoterListScreen: React.FC<Props> = ({navigation}) => {
       const response = await voterService.getVoters(page);
       console.log('📋 fetchVoters success:', response);
       setVoters(response.voters);
-      setTotalPages(response.totalPages);
-      setCurrentPage(response.currentPage);
+      setTotalPages(Number(response.totalPages));
+      setCurrentPage(Number(response.currentPage));
     } catch (error) {
       console.error('📋 fetchVoters error:', error);
       Alert.alert('Error', 'Failed to fetch voters');

@@ -51,8 +51,8 @@ const PublishScreen: React.FC<Props> = ({navigation}) => {
       const response = await voterService.getVotersWithMobile(page);
       console.log('📢 fetchVotersWithMobile response:', response);
       setVoters(response.voters);
-      setTotalPages(response.totalPages);
-      setCurrentPage(response.currentPage);
+      setTotalPages(Number(response.totalPages));
+      setCurrentPage(Number(response.currentPage));
     } catch (error) {
       console.error('📢 fetchVotersWithMobile error:', error);
       Alert.alert('Error', 'Failed to fetch voters');

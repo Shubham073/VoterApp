@@ -48,8 +48,8 @@ const SearchScreen: React.FC<Props> = ({navigation}) => {
       const response = await voterService.searchVotersByName(searchQuery, page);
       console.log('🔍 Search response:', response);
       setVoters(response.voters);
-      setTotalPages(response.totalPages);
-      setCurrentPage(response.currentPage);
+      setTotalPages(Number(response.totalPages));
+      setCurrentPage(Number(response.currentPage));
       setSearched(true);
     } catch (error) {
       console.error('🔍 Search error:', error);

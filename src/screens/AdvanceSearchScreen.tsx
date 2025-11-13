@@ -8,6 +8,7 @@ import {
   TextInput,
   FlatList,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList, Voter, FilterParams} from '../types';
@@ -36,6 +37,7 @@ const AdvanceSearchScreen: React.FC<Props> = ({navigation}) => {
   const [searched, setSearched] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [isFilterExpanded, setIsFilterExpanded] = useState(true);
 
   const filterFields = [
     {key: 'Name', label: 'Name', placeholder: 'Enter name'},
@@ -61,9 +63,10 @@ const AdvanceSearchScreen: React.FC<Props> = ({navigation}) => {
       const searchParams = {...filters, page, limit: 10};
       const response = await voterService.filterVoters(searchParams);
       setVoters(response.voters);
-      setTotalPages(response.totalPages);
-      setCurrentPage(response.currentPage);
+      setTotalPages(Number(response.totalPages));
+      setCurrentPage(Number(response.currentPage));
       setSearched(true);
+      setIsFilterExpanded(false); // Collapse after first search
     } catch (error) {
       Alert.alert('Error', 'Failed to search voters');
       console.error(error);
@@ -81,11 +84,12 @@ const AdvanceSearchScreen: React.FC<Props> = ({navigation}) => {
     navigation.navigate('VoterDetails', {voter, isEditable: false});
   };
 
-  const handleClearFilters = () => {
+  const handleClear = () => {
     setFilters({});
     setVoters([]);
     setSearched(false);
     setCurrentPage(1);
+    setIsFilterExpanded(true); // Expand when cleared
   };
 
   return (
@@ -97,36 +101,48 @@ const AdvanceSearchScreen: React.FC<Props> = ({navigation}) => {
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}>
           <View style={styles.filterSection}>
-            <Text style={styles.title}>Advanced Search</Text>
+            <TouchableOpacity 
+              style={styles.filterHeader}
+              onPress={() => setIsFilterExpanded(!isFilterExpanded)}
+              activeOpacity={0.7}>
+              <Text style={styles.title}>Advanced Search</Text>
+              <Text style={styles.expandIcon}>
+                {isFilterExpanded ? '▼' : '▶'}
+              </Text>
+            </TouchableOpacity>
             
-            {filterFields.map(field => (
-              <View key={field.key} style={styles.inputContainer}>
-                <Text style={styles.label}>{field.label}</Text>
-                <TextInput
-                  style={styles.input}
-                  value={filters[field.key as keyof FilterParams] as string || ''}
-                  onChangeText={text =>
-                    setFilters({...filters, [field.key]: text})
-                  }
-                  placeholder={field.placeholder}
-                  placeholderTextColor={COLORS.textSecondary}
-                />
-              </View>
-            ))}
+            {isFilterExpanded && (
+              <>
+                {filterFields.map(field => (
+                  <View key={field.key} style={styles.inputContainer}>
+                    <Text style={styles.label}>{field.label}</Text>
+                    <TextInput
+                      style={styles.input}
+                      value={filters[field.key as keyof FilterParams] as string || ''}
+                      onChangeText={text =>
+                        setFilters({...filters, [field.key]: text})
+                      }
+                      placeholder={field.placeholder}
+                      placeholderTextColor={COLORS.textSecondary}
+                    />
+                  </View>
+                ))}
 
-            <View style={styles.buttonRow}>
-              <Button
-                title="Search"
-                onPress={() => handleSearch()}
-                style={styles.searchButton}
-              />
-              <Button
-                title="Clear"
-                onPress={handleClearFilters}
-                variant="outline"
-                style={styles.clearButton}
-              />
-            </View>
+                <View style={styles.buttonRow}>
+                  <Button
+                    title="Search"
+                    onPress={() => handleSearch()}
+                    style={styles.searchButton}
+                  />
+                  <Button
+                    title="Clear"
+                    onPress={handleClear}
+                    variant="outline"
+                    style={styles.clearButton}
+                  />
+                </View>
+              </>
+            )}
           </View>
 
           {loading ? (
@@ -167,6 +183,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    paddingTop: SPACING.lg,
   },
   scrollView: {
     flex: 1,
@@ -174,11 +191,20 @@ const styles = StyleSheet.create({
   filterSection: {
     padding: SPACING.md,
   },
+  filterHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: SPACING.sm,
+  },
+  expandIcon: {
+    fontSize: 18,
+    color: COLORS.primary,
+  },
   title: {
     fontSize: FONT_SIZES.xxl,
     fontWeight: '700',
     color: COLORS.text,
-    marginBottom: SPACING.lg,
   },
   inputContainer: {
     marginBottom: SPACING.md,

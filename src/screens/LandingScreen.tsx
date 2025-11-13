@@ -73,7 +73,7 @@ const LandingScreen: React.FC<Props> = ({navigation}) => {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>Voter Management</Text>
+          <Text style={styles.title}>ECM Political Campaign</Text>
           <Text style={styles.subtitle}>Select an option to continue</Text>
         </View>
 
