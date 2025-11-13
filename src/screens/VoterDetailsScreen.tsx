@@ -100,18 +100,146 @@ const VoterDetailsScreen: React.FC<Props> = ({navigation, route}) => {
           <View style={styles.content}>
             <Text style={styles.title}>Voter Details</Text>
 
-            {detailFields.map((field, index) => (
-              field.value ? (
-                <View key={index} style={styles.fieldContainer}>
-                  <Text style={styles.fieldLabel}>{field.label}</Text>
-                  <Text style={styles.fieldValue}>{field.value}</Text>
+            {/* Single Beautiful Card */}
+            <View style={styles.card}>
+              {/* Header Section - Name and EPIC */}
+              <View style={styles.headerSection}>
+                <Text style={styles.voterName}>{voter.Name}</Text>
+                <View style={styles.epicBadge}>
+                  <Text style={styles.epicLabel}>EPIC</Text>
+                  <Text style={styles.epicValue}>{voter['EPIC No']}</Text>
                 </View>
-              ) : null
-            ))}
+              </View>
 
+              {/* Divider */}
+              <View style={styles.divider} />
+
+              {/* Personal Information Section */}
+              <View style={styles.section}>
+                <Text style={styles.sectionHeader}>👤 Personal Information</Text>
+                <View style={styles.infoRow}>
+                  <View style={styles.infoItem}>
+                    <Text style={styles.infoLabel}>Age</Text>
+                    <Text style={styles.infoValue}>{voter.Age}</Text>
+                  </View>
+                  <View style={styles.infoItem}>
+                    <Text style={styles.infoLabel}>Gender</Text>
+                    <Text style={styles.infoValue}>{voter.Gender}</Text>
+                  </View>
+                </View>
+                {voter['Relation Type'] && (
+                  <View style={styles.infoRow}>
+                    <View style={styles.infoItemFull}>
+                      <Text style={styles.infoLabel}>{voter['Relation Type']}</Text>
+                      <Text style={styles.infoValue}>{voter['Relation Name']}</Text>
+                    </View>
+                  </View>
+                )}
+              </View>
+
+              {/* Divider */}
+              <View style={styles.divider} />
+
+              {/* Address Section */}
+              <View style={styles.section}>
+                <Text style={styles.sectionHeader}>🏠 Address</Text>
+                <View style={styles.infoRow}>
+                  <View style={styles.infoItemFull}>
+                    <Text style={styles.infoLabel}>House No</Text>
+                    <Text style={styles.infoValue}>{voter['House No']}</Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Divider */}
+              <View style={styles.divider} />
+
+              {/* Electoral Information Section */}
+              <View style={styles.section}>
+                <Text style={styles.sectionHeader}>🗳️ Electoral Information</Text>
+                <View style={styles.infoRow}>
+                  <View style={styles.infoItem}>
+                    <Text style={styles.infoLabel}>Part No</Text>
+                    <Text style={styles.infoValue}>{voter['Part No']}</Text>
+                  </View>
+                  <View style={styles.infoItem}>
+                    <Text style={styles.infoLabel}>Serial No</Text>
+                    <Text style={styles.infoValue}>{voter['Serial No']}</Text>
+                  </View>
+                </View>
+                {voter['Section Name'] && (
+                  <View style={styles.infoRow}>
+                    <View style={styles.infoItemFull}>
+                      <Text style={styles.infoLabel}>Section</Text>
+                      <Text style={styles.infoValue}>{voter['Section Name']}</Text>
+                    </View>
+                  </View>
+                )}
+              </View>
+
+              {/* Divider */}
+              <View style={styles.divider} />
+
+              {/* Constituency Section */}
+              <View style={styles.section}>
+                <Text style={styles.sectionHeader}>📍 Constituency</Text>
+                <View style={styles.infoRow}>
+                  <View style={styles.infoItemFull}>
+                    <Text style={styles.infoLabel}>Assembly Constituency</Text>
+                    <Text style={styles.infoValue}>
+                      {voter['Assembly Constituency Name']} ({voter['Assembly Constituency No']})
+                    </Text>
+                  </View>
+                </View>
+                {voter['Reservation Status'] && (
+                  <View style={styles.infoRow}>
+                    <View style={styles.infoItemFull}>
+                      <Text style={styles.infoLabel}>Reservation Status</Text>
+                      <Text style={styles.infoValue}>{voter['Reservation Status']}</Text>
+                    </View>
+                  </View>
+                )}
+              </View>
+
+              {/* Divider */}
+              <View style={styles.divider} />
+
+              {/* Polling Station Section */}
+              <View style={styles.section}>
+                <Text style={styles.sectionHeader}>🏢 Polling Station</Text>
+                <View style={styles.infoRow}>
+                  <View style={styles.infoItemFull}>
+                    <Text style={styles.infoLabel}>Station Name</Text>
+                    <Text style={styles.infoValue}>
+                      {voter['Polling Station Name']} ({voter['Polling Station No']})
+                    </Text>
+                  </View>
+                </View>
+                {voter['Polling Station Address'] && (
+                  <View style={styles.infoRow}>
+                    <View style={styles.infoItemFull}>
+                      <Text style={styles.infoLabel}>Address</Text>
+                      <Text style={styles.infoValue}>{voter['Polling Station Address']}</Text>
+                    </View>
+                  </View>
+                )}
+              </View>
+
+              {/* Photo Available Badge */}
+              {voter['Photo Available'] && (
+                <>
+                  <View style={styles.divider} />
+                  <View style={styles.photoBadge}>
+                    <Text style={styles.photoBadgeText}>📷 Photo Available</Text>
+                  </View>
+                </>
+              )}
+            </View>
+
+            {/* Mobile Number Section - Outside the main card */}
             {isEditable && (
               <View style={styles.mobileSection}>
-                <Text style={styles.sectionTitle}>Mobile Number</Text>
+                <Text style={styles.mobileSectionTitle}>📱 Mobile Number</Text>
                 
                 {isEditing ? (
                   <>
@@ -144,8 +272,8 @@ const VoterDetailsScreen: React.FC<Props> = ({navigation, route}) => {
                   </>
                 ) : (
                   <>
-                    <View style={styles.fieldContainer}>
-                      <Text style={styles.fieldValue}>
+                    <View style={styles.mobileDisplay}>
+                      <Text style={styles.mobileNumber}>
                         {voter.mobileNumber || 'Not provided'}
                       </Text>
                     </View>
@@ -154,23 +282,24 @@ const VoterDetailsScreen: React.FC<Props> = ({navigation, route}) => {
                       onPress={() => setIsEditing(true)}
                       variant="outline"
                     />
+                    {voter.mobileNumber && (
+                      <Button
+                        title="Send WhatsApp Message"
+                        onPress={handleWhatsApp}
+                        style={styles.whatsappButton}
+                      />
+                    )}
                   </>
-                )}
-
-                {voter.mobileNumber && !isEditing && (
-                  <Button
-                    title="Send WhatsApp Message"
-                    onPress={handleWhatsApp}
-                    style={styles.whatsappButton}
-                  />
                 )}
               </View>
             )}
 
             {!isEditable && voter.mobileNumber && (
-              <View style={styles.fieldContainer}>
-                <Text style={styles.fieldLabel}>Mobile Number</Text>
-                <Text style={styles.fieldValue}>{voter.mobileNumber}</Text>
+              <View style={styles.mobileSection}>
+                <Text style={styles.mobileSectionTitle}>📱 Mobile Number</Text>
+                <View style={styles.mobileDisplay}>
+                  <Text style={styles.mobileNumber}>{voter.mobileNumber}</Text>
+                </View>
               </View>
             )}
           </View>
@@ -201,43 +330,132 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     marginBottom: SPACING.lg,
   },
-  fieldContainer: {
+  // Main Card Styles
+  card: {
     backgroundColor: COLORS.cardBackground,
-    borderRadius: BORDER_RADIUS.md,
-    padding: SPACING.md,
+    borderRadius: BORDER_RADIUS.lg,
+    padding: SPACING.lg,
+    marginBottom: SPACING.lg,
+    ...SHADOWS.medium,
+  },
+  // Header Section
+  headerSection: {
+    marginBottom: SPACING.md,
+  },
+  voterName: {
+    fontSize: FONT_SIZES.xxl,
+    fontWeight: '700',
+    color: COLORS.text,
     marginBottom: SPACING.sm,
-    ...SHADOWS.small,
   },
-  fieldLabel: {
+  epicBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.primary + '15',
+    alignSelf: 'flex-start',
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.xs,
+    borderRadius: BORDER_RADIUS.md,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.primary,
+  },
+  epicLabel: {
+    fontSize: FONT_SIZES.xs,
+    fontWeight: '600',
+    color: COLORS.primary,
+    marginRight: SPACING.xs,
+  },
+  epicValue: {
     fontSize: FONT_SIZES.sm,
-    color: COLORS.textSecondary,
-    marginBottom: SPACING.xs,
+    fontWeight: '700',
+    color: COLORS.text,
   },
-  fieldValue: {
+  // Divider
+  divider: {
+    height: 1,
+    backgroundColor: COLORS.border,
+    marginVertical: SPACING.md,
+  },
+  // Section Styles
+  section: {
+    marginVertical: SPACING.xs,
+  },
+  sectionHeader: {
+    fontSize: FONT_SIZES.md,
+    fontWeight: '600',
+    color: COLORS.primary,
+    marginBottom: SPACING.sm,
+  },
+  // Info Row & Items
+  infoRow: {
+    flexDirection: 'row',
+    marginBottom: SPACING.sm,
+    gap: SPACING.md,
+  },
+  infoItem: {
+    flex: 1,
+  },
+  infoItemFull: {
+    flex: 1,
+  },
+  infoLabel: {
+    fontSize: FONT_SIZES.xs,
+    color: COLORS.textSecondary,
+    marginBottom: 4,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  infoValue: {
     fontSize: FONT_SIZES.md,
     color: COLORS.text,
     fontWeight: '500',
   },
-  mobileSection: {
-    marginTop: SPACING.lg,
-    padding: SPACING.md,
-    backgroundColor: COLORS.primaryLight + '20',
-    borderRadius: BORDER_RADIUS.lg,
+  // Photo Badge
+  photoBadge: {
+    alignItems: 'center',
+    paddingTop: SPACING.sm,
   },
-  sectionTitle: {
+  photoBadgeText: {
+    fontSize: FONT_SIZES.sm,
+    color: COLORS.success,
+    fontWeight: '600',
+  },
+  // Mobile Section
+  mobileSection: {
+    backgroundColor: COLORS.cardBackground,
+    borderRadius: BORDER_RADIUS.lg,
+    padding: SPACING.lg,
+    marginBottom: SPACING.lg,
+    ...SHADOWS.medium,
+  },
+  mobileSectionTitle: {
     fontSize: FONT_SIZES.lg,
     fontWeight: '600',
     color: COLORS.text,
     marginBottom: SPACING.md,
   },
+  mobileDisplay: {
+    backgroundColor: COLORS.primary + '10',
+    borderRadius: BORDER_RADIUS.md,
+    padding: SPACING.md,
+    marginBottom: SPACING.md,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.primary,
+  },
+  mobileNumber: {
+    fontSize: FONT_SIZES.lg,
+    fontWeight: '600',
+    color: COLORS.text,
+  },
   input: {
-    backgroundColor: COLORS.cardBackground,
+    backgroundColor: COLORS.background,
     borderRadius: BORDER_RADIUS.md,
     padding: SPACING.md,
     fontSize: FONT_SIZES.md,
     color: COLORS.text,
     marginBottom: SPACING.md,
-    ...SHADOWS.small,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   buttonRow: {
     flexDirection: 'row',
