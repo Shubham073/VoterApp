@@ -40,15 +40,16 @@ const AdvanceSearchScreen: React.FC<Props> = ({navigation}) => {
   const [isFilterExpanded, setIsFilterExpanded] = useState(true);
 
   const filterFields = [
-    {key: 'Name', label: 'Name', placeholder: 'Enter name'},
-    {key: 'EPIC No', label: 'EPIC No', placeholder: 'Enter EPIC number'},
-    {key: 'Age', label: 'Age', placeholder: 'Enter age'},
-    {key: 'Gender', label: 'Gender', placeholder: 'Male/Female/Other'},
-    {key: 'House No', label: 'House No', placeholder: 'Enter house number'},
-    {key: 'Part No', label: 'Part No', placeholder: 'Enter part number'},
-    {key: 'Assembly Constituency Name', label: 'Constituency', placeholder: 'Enter constituency'},
-    {key: 'Polling Station Name', label: 'Polling Station', placeholder: 'Enter polling station'},
+    {key: 'Name', label: 'Name', placeholder: 'Enter name', type: 'text'},
+    {key: 'EPIC No', label: 'EPIC No', placeholder: 'Enter EPIC number', type: 'text'},
+    {key: 'Age', label: 'Age', placeholder: 'Enter age', type: 'text'},
+    {key: 'House No', label: 'House No', placeholder: 'Enter house number', type: 'text'},
+    {key: 'Part No', label: 'Part No', placeholder: 'Enter part number', type: 'text'},
+    {key: 'Assembly Constituency Name', label: 'Constituency', placeholder: 'Enter constituency', type: 'text'},
+    {key: 'Polling Station Name', label: 'Polling Station', placeholder: 'Enter polling station', type: 'text'},
   ];
+
+  const genderOptions = ['Male', 'Female', 'Other'];
 
   const handleSearch = async (page: number = 1) => {
     const hasFilters = Object.values(filters).some(val => val && val.trim());
@@ -127,6 +128,27 @@ const AdvanceSearchScreen: React.FC<Props> = ({navigation}) => {
                     />
                   </View>
                 ))}
+
+                {/* Gender Radio Buttons */}
+                <View style={styles.inputContainer}>
+                  <Text style={styles.label}>Gender</Text>
+                  <View style={styles.radioGroup}>
+                    {genderOptions.map(option => (
+                      <TouchableOpacity
+                        key={option}
+                        style={styles.radioButton}
+                        onPress={() => setFilters({...filters, Gender: option})}
+                        activeOpacity={0.7}>
+                        <View style={styles.radioCircle}>
+                          {filters.Gender === option && (
+                            <View style={styles.radioSelected} />
+                          )}
+                        </View>
+                        <Text style={styles.radioLabel}>{option}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
 
                 <View style={styles.buttonRow}>
                   <Button
@@ -222,6 +244,41 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZES.md,
     color: COLORS.text,
     ...SHADOWS.small,
+  },
+  radioGroup: {
+    flexDirection: 'row',
+    gap: SPACING.md,
+    flexWrap: 'wrap',
+  },
+  radioButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.cardBackground,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    borderRadius: BORDER_RADIUS.md,
+    ...SHADOWS.small,
+  },
+  radioCircle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: COLORS.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: SPACING.xs,
+  },
+  radioSelected: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: COLORS.primary,
+  },
+  radioLabel: {
+    fontSize: FONT_SIZES.md,
+    color: COLORS.text,
+    fontWeight: '500',
   },
   buttonRow: {
     flexDirection: 'row',

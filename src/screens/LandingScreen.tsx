@@ -138,14 +138,14 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.md,
   },
   cardTitle: {
-    fontSize: FONT_SIZES.lg,
+    fontSize: FONT_SIZES.md,
     fontWeight: '600',
     color: COLORS.text,
     marginBottom: SPACING.xs,
     textAlign: 'center',
   },
   cardDescription: {
-    fontSize: FONT_SIZES.sm,
+    fontSize: FONT_SIZES.xs,
     color: COLORS.textSecondary,
     textAlign: 'center',
   },
