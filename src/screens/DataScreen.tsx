@@ -59,9 +59,11 @@ const DataScreen: React.FC<Props> = ({navigation}) => {
   const handleExportData = async () => {
     try {
       setIsExporting(true);
+      console.log('🚀 Starting export process...');
       
       // Fetch all voters
       const voters = await voterService.getAllVoters();
+      console.log(`📊 Fetched ${voters.length} voters`);
       
       if (voters.length === 0) {
         Alert.alert('No Data', 'There are no voters to export');
@@ -70,32 +72,60 @@ const DataScreen: React.FC<Props> = ({navigation}) => {
 
       // Convert to CSV
       const csvData = convertToCSV(voters);
+      console.log('✅ CSV data created, length:', csvData.length);
       
-      // Create file path
+      // Create file path - use DownloadDirectoryPath for better Android compatibility
       const fileName = `voters_${new Date().getTime()}.csv`;
-      const filePath = `${RNFS.DocumentDirectoryPath}/${fileName}`;
+      const filePath = Platform.OS === 'android' 
+        ? `${RNFS.DownloadDirectoryPath}/${fileName}`
+        : `${RNFS.DocumentDirectoryPath}/${fileName}`;
+      
+      console.log('📝 Writing to file:', filePath);
       
       // Write file
       await RNFS.writeFile(filePath, csvData, 'utf8');
       
-      // Share file
-      await Share.open({
-        title: 'Export Voter Data',
-        message: 'Voter data CSV file',
-        url: Platform.OS === 'android' ? `file://${filePath}` : filePath,
-        type: 'text/csv',
-        subject: 'Voter Data Export',
-      });
-
-      Alert.alert(
-        'Success',
-        `Exported ${voters.length} voters successfully`,
-      );
-    } catch (error: any) {
-      if (error.message !== 'User did not share') {
-        Alert.alert('Error', 'Failed to export data');
-        console.error(error);
+      console.log('📁 CSV file created successfully');
+      
+      // Verify file exists
+      const fileExists = await RNFS.exists(filePath);
+      console.log('🔍 File exists:', fileExists);
+      
+      if (!fileExists) {
+        throw new Error('File was not created successfully');
       }
+
+      // Share file - try different approaches for Android
+      try {
+        const shareOptions = {
+          title: 'Export Voter Data',
+          subject: 'Voter Data Export',
+          url: `file://${filePath}`,
+          type: 'text/csv',
+          failOnCancel: false,
+        };
+
+        console.log('📤 Attempting to share with options:', shareOptions);
+        
+        await Share.open(shareOptions);
+        
+        Alert.alert(
+          'Success',
+          `Exported ${voters.length} voters successfully!\n\nFile saved at:\n${fileName}`,
+        );
+      } catch (shareError: any) {
+        console.log('⚠️ Share error:', shareError);
+        // If sharing fails, at least inform user file was created
+        if (!shareError.message?.includes('User did not share')) {
+          Alert.alert(
+            'File Created',
+            `CSV file created successfully with ${voters.length} voters.\n\nFile location:\n${filePath}\n\nYou can find it in your app's documents folder.`,
+          );
+        }
+      }
+    } catch (error: any) {
+      console.error('❌ Export error:', error);
+      Alert.alert('Error', `Failed to export data: ${error.message || 'Unknown error'}`);
     } finally {
       setIsExporting(false);
     }
